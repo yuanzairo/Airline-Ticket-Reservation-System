@@ -123,7 +123,7 @@ class FlightFareGUI extends JPanel {
 }
 
 
-public class Main {
+public class FlightFare {
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
             JFrame frame = new JFrame("Flight Fares");
