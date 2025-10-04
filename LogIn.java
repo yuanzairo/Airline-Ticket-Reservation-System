@@ -7,6 +7,7 @@ import javax.swing.border.*;
 
 public class LogIn extends JFrame {
     private JPanel signInPanel; // overlay sign-in form
+    private JPanel signInForm;
     private JButton closeButton;
     private JLayeredPane layeredPane;
 
@@ -40,16 +41,22 @@ public class LogIn extends JFrame {
         bgPic.setBounds(0, 0, 900, 500);
 
         // Navigation bar
-        JPanel navBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 40, 10));
+        JPanel navBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
         navBar.setOpaque(false);
-        JLabel bookFlight = new JLabel("Book a Flight");
-        JLabel travelInfo = new JLabel("Travel Info");
-        JLabel flightStatus = new JLabel("Flight Status");
-        for (JLabel lbl : new JLabel[]{bookFlight, travelInfo, flightStatus}) {
-            lbl.setForeground(Color.WHITE);
-            lbl.setFont(new Font("Arial", Font.BOLD, 14));
-            navBar.add(lbl);
-        }
+
+        JButton bookFlight = createNavButton("Book a Flight");
+        JButton travelInfo = createNavButton("Travel Info");
+        JButton flightStatus = createNavButton("Flight Status");
+
+        // Action listeners for the buttons
+        bookFlight.addActionListener(e -> signInPanel.setVisible(true));
+        travelInfo.addActionListener(e -> signInPanel.setVisible(true));
+        flightStatus.addActionListener(e -> signInPanel.setVisible(true));
+
+        navBar.add(bookFlight);
+        navBar.add(travelInfo);
+        navBar.add(flightStatus);
+
         bgPic.add(navBar, BorderLayout.NORTH);
 
         // Content section
@@ -102,11 +109,39 @@ public class LogIn extends JFrame {
         layeredPane.add(bgPic, JLayeredPane.DEFAULT_LAYER);
 
         createSignInPanel();
+        createSignInForm(); 
         layeredPane.add(signInPanel, JLayeredPane.PALETTE_LAYER);
 
         setVisible(true);
     }
+    
+    private JButton createNavButton(String text) {
+    	// Remove the bg and border of the buttons
+        JButton btn = new JButton(text);
+        btn.setFont(new Font("Arial", Font.BOLD, 14));
+        btn.setForeground(Color.WHITE);
 
+        btn.setContentAreaFilled(false);  // no background
+        btn.setBorderPainted(false);      // no border
+        btn.setFocusPainted(false);       // no focus outline
+        btn.setOpaque(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // hand cursor
+
+        // Optional: hover effect
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btn.setForeground(new Color(78, 159, 229)); // change color on hover
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btn.setForeground(Color.WHITE); // reset color
+            }
+        });
+
+        return btn;
+    }
+    
     private void createSignInPanel() {
         signInPanel = new JPanel() {
             @Override
@@ -148,17 +183,19 @@ public class LogIn extends JFrame {
 
         JTextField emailField = new JTextField("Enter Email Address");
         emailField.setMaximumSize(new Dimension(300, 30));
+        emailField.setMargin(new Insets(5, 10, 5, 10));
         centerPanel.add(emailField);
         centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
         
-        JPasswordField passwordField = new JPasswordField("Password");
+        JPasswordField passwordField = new JPasswordField("");
         passwordField.setMaximumSize(new Dimension(300, 30));
+        passwordField.setMargin(new Insets(5, 10, 5, 10));
         passwordField.setAlignmentX(Component.CENTER_ALIGNMENT);
         centerPanel.add(passwordField);  
         centerPanel.add(Box.createRigidArea(new Dimension(0, 15)));
 
         JButton continueBtn = new JButton("Continue");
-        continueBtn.setBackground(new Color(180, 180, 180));
+        continueBtn.setBackground(new Color(78, 159, 229));
         continueBtn.setForeground(Color.WHITE);
         continueBtn.setFocusPainted(false);
         continueBtn.setMaximumSize(new Dimension(300, 35));
@@ -171,25 +208,42 @@ public class LogIn extends JFrame {
         or.setAlignmentX(Component.CENTER_ALIGNMENT);
         centerPanel.add(or);
         centerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        
+        ImageIcon fbIcon = new ImageIcon("C:\\Users\\ADMIN\\OneDrive\\Pictures\\projectCCE\\communication.png");
+        Image fbImg = fbIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        fbIcon = new ImageIcon(fbImg);
 
-        JButton fbBtn = new JButton("Facebook");
-        fbBtn.setBackground(new Color(59, 89, 152));
-        fbBtn.setForeground(Color.WHITE);
+        JButton fbBtn = new JButton("Facebook", fbIcon);
+        fbBtn.setBackground(Color.WHITE);
+        fbBtn.setForeground(Color.BLACK);
         fbBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         fbBtn.setMaximumSize(new Dimension(300, 35));
+        fbBtn.setFocusPainted(false);
+        fbBtn.setIconTextGap(10);
+        
+        ImageIcon gIcon = new ImageIcon("C:\\Users\\ADMIN\\OneDrive\\Pictures\\projectCCE\\google.png");
+        Image gImg = gIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        gIcon = new ImageIcon(gImg);
 
-        JButton googleBtn = new JButton("Google");
+        JButton googleBtn = new JButton("Google", gIcon);
         googleBtn.setBackground(Color.WHITE);
         googleBtn.setForeground(Color.BLACK);
-        googleBtn.setBorder(new LineBorder(Color.BLACK, 1, true));
         googleBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         googleBtn.setMaximumSize(new Dimension(300, 35));
+        googleBtn.setFocusPainted(false);
+        googleBtn.setIconTextGap(10);
+        
+        ImageIcon appleIcon = new ImageIcon("C:\\Users\\ADMIN\\OneDrive\\Pictures\\projectCCE\\apple.png");
+        Image appleImg = appleIcon.getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH);
+        appleIcon = new ImageIcon(appleImg);
 
-        JButton appleBtn = new JButton("Apple");
-        appleBtn.setBackground(Color.BLACK);
-        appleBtn.setForeground(Color.WHITE);
+        JButton appleBtn = new JButton("IOS", appleIcon);
+        appleBtn.setBackground(Color.WHITE);
+        appleBtn.setForeground(Color.BLACK);
         appleBtn.setAlignmentX(Component.CENTER_ALIGNMENT);
         appleBtn.setMaximumSize(new Dimension(300, 35));
+        appleBtn.setFocusPainted(false);
+        appleBtn.setIconTextGap(10);
 
         centerPanel.add(fbBtn);
         centerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
@@ -197,18 +251,132 @@ public class LogIn extends JFrame {
         centerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         centerPanel.add(appleBtn);
 
-        JLabel footer = new JLabel("Don't have an Account? Sign-up");
-        footer.setFont(new Font("Arial", Font.PLAIN, 12));
-        footer.setAlignmentX(Component.CENTER_ALIGNMENT);
-        centerPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        centerPanel.add(footer);
+        JLabel footerText = new JLabel("Don't have an Account? ");
+        footerText.setFont(new Font("Arial", Font.PLAIN, 12));
 
-        
+        JButton signupBtn = new JButton("Sign-up");
+        signupBtn.setBorderPainted(false);
+        signupBtn.setContentAreaFilled(false);
+        signupBtn.setFocusPainted(false);
+        signupBtn.setOpaque(false);
+        signupBtn.setForeground(Color.BLUE);
+        signupBtn.setFont(new Font("Arial", Font.PLAIN, 12));
+        signupBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        // Action: show the signup panel
+        signupBtn.addActionListener(e -> {
+        	signInPanel.setVisible(false);
+        	signInForm.setVisible(true);
+        });
+
+        JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 5, 0));
+        footerPanel.setOpaque(false);
+        footerPanel.add(footerText);
+        footerPanel.add(signupBtn);
+
+        centerPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        centerPanel.add(footerPanel);
+
         signInPanel.add(headerPanel, BorderLayout.NORTH);
         signInPanel.add(centerPanel, BorderLayout.CENTER);
 
-        signInPanel.setBounds(200, 30, 500, 400);
+        signInPanel.setBounds(200, 30, 400, 400);
         signInPanel.setVisible(false);
+    }
+    
+    private void createSignInForm() {
+        signInForm = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setColor(new Color(240, 240, 240, 230)); // light bg with opacity
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 30, 30);
+            }
+        };
+        signInForm.setLayout(new BorderLayout());
+        signInForm.setOpaque(false);
+
+        closeButton = new JButton("X");
+        closeButton.setFocusPainted(false);
+        closeButton.setContentAreaFilled(false);
+        closeButton.setBorderPainted(false);
+        closeButton.setOpaque(false);
+        closeButton.setForeground(Color.BLACK);
+        closeButton.setBorder(new LineBorder(Color.BLACK, 1, true));
+        closeButton.setPreferredSize(new Dimension(40, 25));
+        closeButton.addActionListener(e -> signInForm.setVisible(false));
+
+        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+        headerPanel.setOpaque(false);
+        headerPanel.add(closeButton);
+
+        JPanel centerPanel = new JPanel(new GridBagLayout());
+        centerPanel.setOpaque(false);
+        centerPanel.setBorder(new EmptyBorder(20, 40, 20, 40));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 8, 5); // spacing
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+        gbc.weightx = 1;
+
+        JLabel header = new JLabel("Create Your Account", SwingConstants.CENTER);
+        header.setFont(new Font("Arial", Font.BOLD, 20));
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        centerPanel.add(header, gbc);
+
+        gbc.gridwidth = 1; 
+
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.WEST; 
+        JLabel email = new JLabel("Enter your email address");
+        email.setFont(new Font("Arial", Font.PLAIN, 12));
+        centerPanel.add(email, gbc);
+
+        gbc.gridy++;
+        JTextField emailField = new JTextField();
+        emailField.setPreferredSize(new Dimension(250, 30));
+        centerPanel.add(emailField, gbc);
+
+        gbc.gridy++;
+        JLabel pass = new JLabel("Enter your password");
+        pass.setFont(new Font("Arial", Font.PLAIN, 12));
+        centerPanel.add(pass, gbc);
+
+        gbc.gridy++;
+        JPasswordField passwordField = new JPasswordField();
+        passwordField.setPreferredSize(new Dimension(250, 30));
+        centerPanel.add(passwordField, gbc);
+
+        gbc.gridy++;
+        JLabel fn = new JLabel("Enter your full name");
+        fn.setFont(new Font("Arial", Font.PLAIN, 12));
+        centerPanel.add(fn, gbc);
+
+        gbc.gridy++;
+        JTextField nameField = new JTextField();
+        nameField.setPreferredSize(new Dimension(250, 30));
+        centerPanel.add(nameField, gbc);
+
+        gbc.gridy++;
+        gbc.anchor = GridBagConstraints.CENTER;
+        JButton continueBtn = new JButton("Continue");
+        continueBtn.setBackground(new Color(78, 159, 229));
+        continueBtn.setForeground(Color.WHITE);
+        continueBtn.setFocusPainted(false);
+        continueBtn.setPreferredSize(new Dimension(250, 35));
+        centerPanel.add(continueBtn, gbc);
+
+        signInForm.add(headerPanel, BorderLayout.NORTH);
+        signInForm.add(centerPanel, BorderLayout.CENTER);
+
+        signInForm.setBounds(200, 30, 400, 400);
+        signInForm.setVisible(false);
+
+        layeredPane.add(signInForm, JLayeredPane.PALETTE_LAYER);
     }
 
     public static void main(String[] args) {
