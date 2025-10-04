@@ -1,141 +1,139 @@
-package airportTest;
+package project;
 
-import java.awt.Color;
-import java.awt.Image;
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.AbstractBorder;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+public class BookFlight extends JFrame {
+    private JLayeredPane layeredPane;
 
-public class BookFlight{
+    public BookFlight() {
+    	JFrame bookFlightFrame = new JFrame("Airline Booking");
+        setSize(900, 445);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setResizable(false);
 
-	public static JButton reusableButton(String text) {
-	    JButton button = new JButton(text);
-	    button.setBorderPainted(false);
-	    button.setFocusPainted(false);
-	    return button;
-	} 
-	
+        layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(900, 445));
+        setContentPane(layeredPane);
+
+        JPanel bgPic = new JPanel() {
+            Image bg = new ImageIcon("C:\\Users\\ADMIN\\OneDrive\\Pictures\\projectCCE\\bg3.jpg").getImage();
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
+                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.10f));
+                g2d.setColor(Color.BLACK);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+                g2d.dispose();
+            }
+        };
+        bgPic.setLayout(new BorderLayout());
+        bgPic.setBounds(0, 0, 900, 445);
+
+        JPanel navBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+        navBar.setOpaque(false);
+
+        JButton bookFlight = reusableButton("Book a flight");
+        JButton travelInfo = reusableButton("Travel Info");
+        JButton flightStatus = reusableButton("Flight status");
+
+        navBar.add(bookFlight);
+        navBar.add(travelInfo);
+        navBar.add(flightStatus);
+        bgPic.add(navBar, BorderLayout.NORTH);
+
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(null);
+        mainPanel.setBackground(new Color(255, 255, 255, 150));
+        mainPanel.setBounds(50, 60, 800, 330);
+
+        ImageIcon logoIcon = new ImageIcon("C:\\Users\\ADMIN\\OneDrive\\Pictures\\projectCCE\\logo.png"); // change path
+        Image logoImg = logoIcon.getImage().getScaledInstance(250, 200, Image.SCALE_SMOOTH);
+        JLabel logoLabel = new JLabel(new ImageIcon(logoImg));
+        logoLabel.setBounds(0, 0, 150, 100);
+        mainPanel.add(logoLabel);
+
+        JLabel title = new JLabel("BOOK NOW AND GET THE BEST FLIGHT OFFERS!");
+        title.setFont(new Font("Arial", Font.BOLD, 20));
+        title.setForeground(Color.BLACK);
+        title.setBounds(370, 20, 600, 30);
+        mainPanel.add(title);
+
+        JPanel gridPanel = new JPanel(new GridLayout(2, 2, 30, 20));
+        gridPanel.setOpaque(false);
+        gridPanel.setBounds(100, 80, 680, 250);
+
+        String[] times = { "08:00 AM", "10:30 AM", "01:15 PM", "04:45 PM" };
+
+        for (int i = 0; i < 4; i++) {
+            JPanel card = new JPanel(null);
+            card.setBackground(new Color(78, 159, 229));
+            card.setPreferredSize(new Dimension(300, 120));
+
+            JLabel route = new JLabel("Davao  ➜  Manila");
+            route.setFont(new Font("Segoe UI Symbol", Font.BOLD, 16));
+            route.setBounds(30, 20, 200, 20);
+            card.add(route);
+
+            JLabel date = new JLabel("04 Oct 2025");
+            date.setFont(new Font("Arial", Font.PLAIN, 14));
+            date.setBounds(30, 45, 200, 20);
+            card.add(date);
+
+            // para lahi-lahi ang time
+            JLabel time = new JLabel(times[i]);
+            time.setFont(new Font("Arial", Font.PLAIN, 14));
+            time.setBounds(30, 70, 100, 20);
+            card.add(time);
+
+            JButton selectBtn = new JButton("SELECT");
+            selectBtn.setFont(new Font("Arial", Font.BOLD, 12));
+            selectBtn.setBackground(Color.BLACK);
+            selectBtn.setForeground(Color.WHITE);
+            selectBtn.setFocusPainted(false);
+            selectBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            selectBtn.setBounds(200, 70, 100, 30);
+            selectBtn.setBorderPainted(false);
+
+            card.add(selectBtn);
+
+            gridPanel.add(card);
+        }
+        mainPanel.add(gridPanel);
+        bgPic.add(mainPanel, BorderLayout.CENTER);
+
+        layeredPane.add(bgPic, JLayeredPane.DEFAULT_LAYER);
+        setVisible(true);
+    }
+
+    private JButton reusableButton(String text) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Arial", Font.BOLD, 14));
+        button.setForeground(Color.WHITE);
+        button.setContentAreaFilled(false);
+        button.setBorderPainted(false);
+        button.setFocusPainted(false);
+        button.setOpaque(false);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+            	button.setForeground(new Color(78, 159, 229));
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+            	button.setForeground(Color.WHITE);
+            }
+        });
+        return button;
+    }
+
     public static void main(String[] args) {
-    	
-        JFrame bookFlightFrame = new JFrame("Airline Booking");
-        bookFlightFrame.setSize(900, 445);
-        bookFlightFrame.setLocationRelativeTo(null);
-        bookFlightFrame.setResizable(false);
-        bookFlightFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        bookFlightFrame.setLayout(null);
-
-        Image bgImage = new ImageIcon("images/bg.jpg").getImage().getScaledInstance(900, 445, Image.SCALE_SMOOTH);
-        JLabel bgLabel = new JLabel(new ImageIcon(bgImage));
-        bgLabel.setBounds(0, 0, 900, 445);
-        bgLabel.setLayout(null);
-        bookFlightFrame.add(bgLabel); 
-
-        JPanel frontPanel = new JPanel(null);
-        frontPanel.setOpaque(false);
-        frontPanel.setBounds(0, 0, 900, 445);
-        bgLabel.add(frontPanel);   
-        
-        Image icon = new ImageIcon("images/logo.png").getImage().getScaledInstance(200, 90, Image.SCALE_SMOOTH);
-        JLabel iconLabel = new JLabel(new ImageIcon(icon));
-        iconLabel.setBounds(20, 10, 300, 75);
-        frontPanel.add(iconLabel);
-
-        // Button
-        JButton buttonBookFlight = reusableButton("Book a flight");
-        buttonBookFlight.setBounds(350, 40, 120, 40);     
-        frontPanel.add(buttonBookFlight);
-
-        JButton buttonTravelInfo = reusableButton("Travel Info");
-        buttonTravelInfo.setBounds(490, 40, 120, 40);
-        buttonTravelInfo.setBorderPainted(false);
-        buttonTravelInfo.setFocusPainted(false);
-        frontPanel.add(buttonTravelInfo);
-
-        JButton buttonFlightStatus = reusableButton("Flight Status");
-        buttonFlightStatus.setBounds(630, 40, 120, 40);
-        frontPanel.add(buttonFlightStatus);
-        
-        JPanel flights = new JPanel(null);
-        flights.setBounds(0, 0, 900, 445);
-        flights.setBackground(Color.WHITE);
-        flights.setBounds(40, 90, 810, 300);
-        bgLabel.add(flights);
-        
-        // flight 1
-        JPanel flight1 = new JPanel(null);
-        flight1.setBackground(Color.LIGHT_GRAY);
-        flight1.setBounds(40, 40, 300, 100);
-        flights.add(flight1);
-
-        JLabel flightInfo1 = new JLabel("Current ➝ Destination");
-        flightInfo1.setBounds(20, 10, 200, 20);
-        flight1.add(flightInfo1);
-
-        JLabel date1 = new JLabel("Week, Day-Month");
-        date1.setBounds(20, 40, 200, 20);
-        flight1.add(date1);
-
-        JButton select1 = reusableButton("SELECT");
-        select1.setBounds(180, 60, 100, 30);
-        flight1.add(select1);
-
-        // flight 2
-        JPanel flight2 = new JPanel(null);
-        flight2.setBackground(Color.LIGHT_GRAY);
-        flight2.setBounds(430, 40, 300, 100);
-        flights.add(flight2);
-
-        JLabel flightInfo2 = new JLabel("Current ➝ Destination");
-        flightInfo2.setBounds(20, 10, 200, 20);
-        flight2.add(flightInfo2);
-
-        JLabel date2 = new JLabel("Week, Day-Month");
-        date2.setBounds(20, 40, 200, 20);
-        flight2.add(date2);
-
-        JButton select2 = reusableButton("SELECT");
-        select2.setBounds(180, 60, 100, 30);
-        flight2.add(select2);
-
-        // flight 3
-        JPanel flight3 = new JPanel(null);
-        flight3.setBackground(Color.LIGHT_GRAY);
-        flight3.setBounds(40, 160, 300, 100);
-        flights.add(flight3);
-
-        JLabel flightInfo3 = new JLabel("Current ➝ Destination");
-        flightInfo3.setBounds(20, 10, 200, 20);
-        flight3.add(flightInfo3);
-
-        JLabel date3 = new JLabel("Week, Day-Month");
-        date3.setBounds(20, 40, 200, 20);
-        flight3.add(date3);
-
-        JButton select3 = reusableButton("SELECT");
-        select3.setBounds(180, 60, 100, 30);
-        flight3.add(select3);
-
-        // flight 4
-        JPanel flight4 = new JPanel(null);
-        flight4.setBackground(Color.LIGHT_GRAY);
-        flight4.setBounds(430, 160, 300, 100);
-        flights.add(flight4);
-
-        JLabel flightInfo4 = new JLabel("Current ➝ Destination");
-        flightInfo4.setBounds(20, 10, 200, 20);
-        flight4.add(flightInfo4);
-
-        JLabel date4 = new JLabel("Week, Day-Month");
-        date4.setBounds(20, 40, 200, 20);
-        flight4.add(date4);
-
-        JButton select4 = reusableButton("SELECT");
-        select4.setBounds(180, 60, 100, 30);
-        flight4.add(select4);
-
-        bookFlightFrame.setVisible(true);
+        SwingUtilities.invokeLater(BookFlight::new);
     }
 }
