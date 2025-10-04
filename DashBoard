@@ -94,13 +94,62 @@ public class DashBoard extends JFrame {
         paragraph4.setForeground(Color.WHITE);
         paragraph4.setBounds(260, 210, 740, 110);
         
-        JButton bookBtn = new JButton("Book a flight");
-        bookBtn.setFont(new Font("Arial", Font.PLAIN, 14));
-        bookBtn.setBackground(new Color(78, 159, 229));
-        bookBtn.setForeground(Color.WHITE);
-        bookBtn.setFocusPainted(false);
-        bookBtn.setBounds(490, 300, 200, 30);
-        
+        // Flight Search panel
+        JPanel flightPanel = new JPanel();
+        flightPanel.setLayout(null);
+        flightPanel.setBackground(new Color(255, 255, 255, 230));
+        flightPanel.setBounds(80, 300, 750, 80);
+
+        JLabel fromLabel = new JLabel("From");
+        fromLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        fromLabel.setBounds(20, 10, 100, 20);
+        flightPanel.add(fromLabel);
+
+        JTextField fromField = new JTextField("Davao DVO");
+        fromField.setFont(new Font("Arial", Font.BOLD, 14));
+        fromField.setBounds(20, 30, 130, 30);
+        flightPanel.add(fromField);
+
+        JLabel toLabel = new JLabel("To");
+        toLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        toLabel.setBounds(170, 10, 100, 20);
+        flightPanel.add(toLabel);
+
+        JTextField toField = new JTextField("Select Destination");
+        toField.setFont(new Font("Arial", Font.PLAIN, 14));
+        toField.setBounds(170, 30, 130, 30);
+        flightPanel.add(toField);
+
+        JLabel departLabel = new JLabel("Depart");
+        departLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        departLabel.setBounds(320, 10, 100, 20);
+        flightPanel.add(departLabel);
+
+        JTextField departField = new JTextField("04 Oct 2025");
+        departField.setFont(new Font("Arial", Font.PLAIN, 14));
+        departField.setBounds(320, 30, 120, 30);
+        flightPanel.add(departField);
+
+        JLabel returnLabel = new JLabel("Return");
+        returnLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        returnLabel.setBounds(450, 10, 100, 20);
+        flightPanel.add(returnLabel);
+
+        JTextField returnField = new JTextField("Returning on");
+        returnField.setFont(new Font("Arial", Font.PLAIN, 14));
+        returnField.setBounds(450, 30, 120, 30);
+        flightPanel.add(returnField);
+
+        JButton searchBtn = new JButton("Book a flight");
+        searchBtn.setBackground(new Color(78, 159, 229));
+        searchBtn.setForeground(Color.WHITE);
+        searchBtn.setFocusPainted(false);
+        searchBtn.setFont(new Font("Arial", Font.BOLD, 14));
+        searchBtn.setBounds(580, 25, 150, 35);
+        searchBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        flightPanel.add(searchBtn);
+
+        // Add flight panel to logoPanel    
         logoPanel.add(title);
         logoPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         logoPanel.add(title2);
@@ -113,7 +162,7 @@ public class DashBoard extends JFrame {
         logoPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         logoPanel.add(paragraph4);
         logoPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        logoPanel.add(bookBtn);
+        logoPanel.add(flightPanel);    
         logoPanel.add(Box.createVerticalGlue());
         
         contentPanel.add(logoPanel);
