@@ -1,10 +1,7 @@
-import javax.swing.; 
+import javax.swing.*; 
 import javax.swing.table.DefaultTableModel;
 import java.awt.;
 
-/**
-
-JFrame 900x445 with a scrollable JTable for flight information. */
 public class FlightStatus extends JFrame {
 
 public FlightStatus() {
