@@ -1,0 +1,157 @@
+package project;
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
+
+public class DashBoard extends JFrame {
+	private JLayeredPane layeredPane;
+	
+	public DashBoard() {
+		setTitle("Davao Airlines");
+        setSize(900, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setResizable(false);
+        
+        layeredPane = new JLayeredPane();
+        layeredPane.setPreferredSize(new Dimension(900, 500));
+        setContentPane(layeredPane);
+        
+        JPanel bgPic = new JPanel() {
+            Image bg = new ImageIcon("C:\\Users\\ADMIN\\OneDrive\\Pictures\\projectCCE\\background.jpg").getImage();
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g.create();
+                g2d.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
+                g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.10f));
+                g2d.setColor(Color.BLACK);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+                g2d.dispose();
+            }
+        };
+        bgPic.setLayout(new BorderLayout());
+        bgPic.setBounds(0, 0, 900, 500);
+        
+        JPanel navBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
+        navBar.setOpaque(false);
+
+        JButton bookFlight = createNavButton("Book a Flight");
+        JButton travelInfo = createNavButton("Travel Info");
+        JButton flightStatus = createNavButton("Flight Status");
+
+        navBar.add(bookFlight);
+        navBar.add(travelInfo);
+        navBar.add(flightStatus);
+
+        bgPic.add(navBar, BorderLayout.NORTH);
+        
+        JPanel contentPanel = new JPanel(new GridLayout(1, 2, 20, 0));
+        contentPanel.setOpaque(false);
+        
+        JPanel logoPanel = new JPanel();
+        logoPanel.setOpaque(false);
+        logoPanel.setLayout(null);
+        logoPanel.setBounds(20, 20, 350, 100);
+
+        ImageIcon logo = new ImageIcon("C:\\Users\\ADMIN\\OneDrive\\Pictures\\projectCCE\\logo.png");
+        Image logoImg = logo.getImage().getScaledInstance(300, 350, Image.SCALE_SMOOTH);
+        JLabel logoLabel = new JLabel(new ImageIcon(logoImg));
+        logoLabel.setBounds(0, 0, 250, 200);
+        logoPanel.add(logoLabel);
+        
+        JLabel title = new JLabel("Time for a new");
+        title.setFont(new Font("Arial", Font.BOLD, 50));
+        title.setForeground(Color.WHITE);
+        title.setAlignmentX(Component.LEFT_ALIGNMENT);
+        title.setBounds(320, 30, 600, 130);
+        
+        JLabel title2 = new JLabel("Journey!");
+        title2.setFont(new Font("Arial", Font.BOLD, 50));
+        title2.setForeground(Color.WHITE);
+        title2.setAlignmentX(Component.LEFT_ALIGNMENT);
+        title2.setBounds(400, 80, 600, 130);
+        
+        JLabel paragraph = new JLabel("Enjoy seamless connectivity to 100 cities across the Philippines.");
+        paragraph.setFont(new Font("Arial", Font.PLAIN, 14));
+        paragraph.setForeground(Color.WHITE);
+        paragraph.setBounds(300, 150, 740, 110);
+        
+        JLabel paragraph2 = new JLabel("Fly from Davao to any city with Davao Airlines and experience comfort, convenience,");
+        paragraph2.setFont(new Font("Arial", Font.PLAIN, 14));
+        paragraph2.setForeground(Color.WHITE);
+        paragraph2.setBounds(230, 170, 740, 110);
+        
+        JLabel paragraph3 = new JLabel("and unbeatable service on every trip.");
+        paragraph3.setFont(new Font("Arial", Font.PLAIN, 14));
+        paragraph3.setForeground(Color.WHITE);
+        paragraph3.setBounds(350, 190, 740, 110);
+        
+        JLabel paragraph4 = new JLabel("Book your adventure today and discover the Philippines like never before!");
+        paragraph4.setFont(new Font("Arial", Font.PLAIN, 14));
+        paragraph4.setForeground(Color.WHITE);
+        paragraph4.setBounds(260, 210, 740, 110);
+        
+        JButton bookBtn = new JButton("Book a flight");
+        bookBtn.setFont(new Font("Arial", Font.PLAIN, 14));
+        bookBtn.setBackground(new Color(78, 159, 229));
+        bookBtn.setForeground(Color.WHITE);
+        bookBtn.setFocusPainted(false);
+        bookBtn.setBounds(490, 300, 200, 30);
+        
+        logoPanel.add(title);
+        logoPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        logoPanel.add(title2);
+        logoPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        logoPanel.add(paragraph);
+        logoPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        logoPanel.add(paragraph2);
+        logoPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        logoPanel.add(paragraph3);
+        logoPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        logoPanel.add(paragraph4);
+        logoPanel.add(Box.createRigidArea(new Dimension(0, 20)));
+        logoPanel.add(bookBtn);
+        logoPanel.add(Box.createVerticalGlue());
+        
+        contentPanel.add(logoPanel);
+        bgPic.add(contentPanel, BorderLayout.CENTER);
+        
+        layeredPane.add(bgPic, JLayeredPane.DEFAULT_LAYER);
+        
+        setVisible(true);
+	}
+	
+	private JButton createNavButton(String text) {
+    	// Remove the bg and border of the buttons
+        JButton btn = new JButton(text);
+        btn.setFont(new Font("Arial", Font.BOLD, 14));
+        btn.setForeground(Color.WHITE);
+
+        btn.setContentAreaFilled(false);  // no background
+        btn.setBorderPainted(false);      // no border
+        btn.setFocusPainted(false);       // no focus outline
+        btn.setOpaque(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); // hand cursor
+
+        // Optional: hover effect
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btn.setForeground(new Color(78, 159, 229)); // change color on hover
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btn.setForeground(Color.WHITE); // reset color
+            }
+        });
+
+        return btn;
+    }
+	
+	 public static void main(String[] args) {
+	        SwingUtilities.invokeLater(DashBoard::new);
+	    }
+}
