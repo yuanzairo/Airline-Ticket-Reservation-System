@@ -8,14 +8,14 @@ public class BookFlight extends JFrame {
     private JLayeredPane layeredPane;
 
     public BookFlight() {
-    	JFrame bookFlightFrame = new JFrame("Airline Booking");
-        setSize(900, 445);
+    	setTitle("Davao Airlines");
+        setSize(900, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setResizable(false);
 
         layeredPane = new JLayeredPane();
-        layeredPane.setPreferredSize(new Dimension(900, 445));
+        layeredPane.setPreferredSize(new Dimension(900, 500));
         setContentPane(layeredPane);
 
         JPanel bgPic = new JPanel() {
@@ -32,7 +32,7 @@ public class BookFlight extends JFrame {
             }
         };
         bgPic.setLayout(new BorderLayout());
-        bgPic.setBounds(0, 0, 900, 445);
+        bgPic.setBounds(0, 0, 900, 500);
 
         JPanel navBar = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
         navBar.setOpaque(false);
@@ -63,16 +63,16 @@ public class BookFlight extends JFrame {
         title.setBounds(370, 20, 600, 30);
         mainPanel.add(title);
 
-        JPanel gridPanel = new JPanel(new GridLayout(2, 2, 30, 20));
+        JPanel gridPanel = new JPanel(new GridLayout(2, 3, 20, 20));
         gridPanel.setOpaque(false);
-        gridPanel.setBounds(100, 80, 680, 250);
+        gridPanel.setBounds(40, 90, 800, 290);
 
-        String[] times = { "08:00 AM", "10:30 AM", "01:15 PM", "04:45 PM" };
+        String[] times = { "08:00 AM", "10:30 AM", "01:15 PM", "04:45 PM", "04:15 PM", "01:55 PM" };
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 6; i++) {
             JPanel card = new JPanel(null);
             card.setBackground(new Color(78, 159, 229));
-            card.setPreferredSize(new Dimension(300, 120));
+            card.setPreferredSize(new Dimension(600, 120));
 
             JLabel route = new JLabel("Davao  ➜  Manila");
             route.setFont(new Font("Segoe UI Symbol", Font.BOLD, 16));
@@ -96,7 +96,7 @@ public class BookFlight extends JFrame {
             selectBtn.setForeground(Color.WHITE);
             selectBtn.setFocusPainted(false);
             selectBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-            selectBtn.setBounds(200, 70, 100, 30);
+            selectBtn.setBounds(130, 90, 100, 30);
             selectBtn.setBorderPainted(false);
 
             card.add(selectBtn);
