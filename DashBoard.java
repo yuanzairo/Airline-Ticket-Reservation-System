@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.util.*;
+import java.util.List;
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
 
@@ -9,21 +10,24 @@ public class DashBoard extends JFrame {
     JPanel bgPic;
     int algoType = 1;
 
-    static String[] cities = {
-            "Bacolod (BCD)",
-            "Butuan (BXU)",
-            "Cagayan de Oro (CGY)",
-            "Cebu (CEB)",
-            "Davao (DVO)",
-            "General Santos (GES)",
-            "Iloilo (ILO)",
-            "Legazpi (LGP)",
-            "Manila (MNL)",
-            "Puerto Princesa (PPS)",
-            "Tacloban (TAC)",
-            "Tagbilaran (TAG)",
-            "Zamboanga (ZAM)"
-    };
+    // === Unified city data: name + coordinates in one place ===
+    private static final Map<String, double[]> cityCoords = Map.ofEntries(
+            Map.entry("Bacolod (BCD)", new double[] { 10.7764, 123.0150 }),
+            Map.entry("Butuan (BXU)", new double[] { 8.9494, 125.5130 }),
+            Map.entry("Cagayan de Oro (CGY)", new double[] { 8.4156, 124.6110 }),
+            Map.entry("Cebu (CEB)", new double[] { 10.3075, 123.9790 }),
+            Map.entry("Davao (DVO)", new double[] { 7.1255, 125.6460 }),
+            Map.entry("General Santos (GES)", new double[] { 6.1064, 125.2350 }),
+            Map.entry("Iloilo (ILO)", new double[] { 10.8330, 122.4934 }),
+            Map.entry("Legazpi (LGP)", new double[] { 13.1580, 123.7390 }),
+            Map.entry("Manila (MNL)", new double[] { 14.5086, 121.0200 }),
+            Map.entry("Puerto Princesa (PPS)", new double[] { 9.7422, 118.7520 }),
+            Map.entry("Tacloban (TAC)", new double[] { 11.2320, 125.0270 }),
+            Map.entry("Tagbilaran (TAG)", new double[] { 9.6489, 124.0420 }),
+            Map.entry("Zamboanga (ZAM)", new double[] { 6.9224, 122.0600 }));
+
+    // Derive cities array from map keys — always in sync!
+    private static final String[] cities = cityCoords.keySet().toArray(new String[0]);
 
     public DashBoard() {
         setTitle("Davao Airlines");
@@ -93,7 +97,7 @@ public class DashBoard extends JFrame {
     private void showTravelInfoContent() {
         contentPanel.removeAll();
         JPanel travelPanel = new JPanel() {
-            Image bg = new ImageIcon("images\\map.jpg").getImage().getScaledInstance(900, 500, Image.SCALE_SMOOTH);;
+            Image bg = new ImageIcon("images\\map.jpg").getImage().getScaledInstance(900, 500, Image.SCALE_SMOOTH);
 
             @Override
             protected void paintComponent(Graphics g) {
@@ -311,30 +315,6 @@ public class DashBoard extends JFrame {
         return content;
     }
 
-    // ===== City coordinates =====
-    private static final Map<String, double[]> cityCoords = new HashMap<>();
-    private static final double[][] coordinates = {
-            { 10.7764, 123.0150 }, // BCD
-            { 8.9494, 125.5130 }, // BXU
-            { 8.4156, 124.6110 }, // CGY
-            { 10.3075, 123.9790 }, // CEB
-            { 7.1255, 125.6460 }, // DVO
-            { 6.1064, 125.2350 }, // GES
-            { 10.8330, 122.4934 }, // ILO
-            { 13.1580, 123.7390 }, // LGP
-            { 14.5086, 121.0200 }, // MNL
-            { 9.7422, 118.7520 }, // PPS
-            { 11.2320, 125.0270 }, // TAC
-            { 9.6489, 124.0420 }, // TAG
-            { 6.9224, 122.0600 } // ZAM
-    };
-
-    static {
-        for (int i = 0; i < cities.length; i++) {
-            cityCoords.put(cities[i], coordinates[i]);
-        }
-    }
-
     // --- Haversine formula ---
     private static double haversineDistance(double lat1, double lon1, double lat2, double lon2) {
         final double R = 6371;
@@ -547,7 +527,6 @@ public class DashBoard extends JFrame {
         result.put("distance", bestDistance);
         result.put("path", path);
         return result;
-
     }
 
     // Helper class to store city name + distance
@@ -572,8 +551,7 @@ public class DashBoard extends JFrame {
             return;
 
         Map<String, Map<String, Double>> graph = buildGraph();
-        Map<String, Object> result = dijkstra(graph, from, to);
-        ;
+        Map<String, Object> result;
         switch (algoType) {
             case 1:
                 result = dijkstra(graph, from, to);
@@ -581,10 +559,12 @@ public class DashBoard extends JFrame {
             case 2:
                 result = dijkstra2(graph, from, to);
                 break;
+            default:
+                result = dijkstra(graph, from, to);
         }
         double distance = (double) result.get("distance");
         @SuppressWarnings("unchecked")
-        java.util.List<String> path = (java.util.List<String>) result.get("path");
+        List<String> path = (List<String>) result.get("path");
 
         String routeText = String.join(" → ",
                 path.stream()
@@ -592,8 +572,15 @@ public class DashBoard extends JFrame {
                         .toArray(String[]::new));
         routeLabel.setText("Route: " + routeText);
 
-        double baseFare = 1000;
+        double baseFare = 800;
         double price = baseFare + distance * 8;
+        
+        Date departDate = departChooser.getDate();
+        Date returnDate = returnChooser.getDate();
+        double dateFactor = calculateDatePriceFactor(departDate, returnDate);
+        
+        price *= dateFactor;
+        
         priceLabel.setText("Price: ₱" + String.format("%.2f", price));
 
         long endTime = System.nanoTime();
@@ -601,6 +588,25 @@ public class DashBoard extends JFrame {
         JLabel runtimeLabel = findRuntimeLabel(priceLabel.getParent());
         if (runtimeLabel != null)
             runtimeLabel.setText(String.format("Runtime: %.6f ms", runtimeMs));
+    }
+
+    // ===== Date-based price adjustment =====
+    private double calculateDatePriceFactor(Date departDate, Date returnDate) {
+        if (departDate == null || returnDate == null)
+            return 1.0;
+
+        long now = System.currentTimeMillis();
+
+        // Days until departure
+        long departDiff = (departDate.getTime() - now) / (1000 * 60 * 60 * 24);
+
+        // Days between departure and return
+        long returnDiff = (returnDate.getTime() - departDate.getTime()) / (1000 * 60 * 60 * 24);
+
+        double departFactor = 1.0 + Math.min(departDiff / 30.0, 0.5); // up to +50% if departure far away
+        double returnFactor = 1.0 - Math.min(returnDiff / 60.0, 0.3); // up to -30% if return far from departure
+
+        return departFactor * returnFactor;
     }
 
     private JLabel findRuntimeLabel(Container container) {
