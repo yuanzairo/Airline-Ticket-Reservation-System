@@ -113,7 +113,7 @@ public class DashBoard extends JFrame {
 
     private void showFlightStatusContent() {
         contentPanel.removeAll();
-        contentPanel.add(new FlightStatusPanel());
+        contentPanel.add(new FlightStatus());
         contentPanel.revalidate();
         contentPanel.repaint();
     }
