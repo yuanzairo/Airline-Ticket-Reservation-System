@@ -10,7 +10,6 @@ public class DashBoard extends JFrame {
     JPanel bgPic;
     int algoType = 1;
 
-    // === Unified city data: name + coordinates in one place ===
     private static final Map<String, double[]> cityCoords = Map.ofEntries(
             Map.entry("Bacolod (BCD)", new double[] { 10.7764, 123.0150 }),
             Map.entry("Butuan (BXU)", new double[] { 8.9494, 125.5130 }),
@@ -26,7 +25,6 @@ public class DashBoard extends JFrame {
             Map.entry("Tagbilaran (TAG)", new double[] { 9.6489, 124.0420 }),
             Map.entry("Zamboanga (ZAM)", new double[] { 6.9224, 122.0600 }));
 
-    // Derive cities array from map keys — always in sync!
     private static final String[] cities = cityCoords.keySet().toArray(new String[0]);
 
     public DashBoard() {
