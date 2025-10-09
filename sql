@@ -1,6 +1,11 @@
 --DDL
 CREATE DATABASE airline;
 
+CREATE TABLE admins (
+    username varchar(50) PRIMARY KEY,
+    password varchar(255)
+):
+    
 CREATE TABLE passenger (
     passenger_id VARCHAR(10) PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
