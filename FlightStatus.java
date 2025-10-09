@@ -1,67 +1,136 @@
-import javax.swing.*; 
-import javax.swing.table.DefaultTableModel;
-import java.awt.;
+import javax.swing.*;
+import java.awt.*;
+import java.sql.*;
 
-public class FlightStatus extends JFrame {
+public class FlightStatus extends JPanel {
+    private JTextField bookingIdField;
+    private JLabel nameValue, emailValue, originValue, destinationValue, departValue, returnValue, priceValue, routeValue, statusMessage;
 
-public FlightStatus() {
- setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
- setSize(900, 445);
- setLocationRelativeTo(null); // center on screen
+    public FlightStatus() {
+        setLayout(null);
+        JLabel title = new JLabel("Check Flight Status");
+        title.setFont(new Font("Arial", Font.BOLD, 26));
+        title.setBounds(300, 20, 400, 40);
+        add(title);
 
-// Column names for flight info
- String[] columnNames = {
-     "Flight ID", "Passenger Name", "Email", "Origin", "Destination", "Departure Time", "Arrival Time"
- };
+        JPanel detailsPanel = new JPanel(null);
+        detailsPanel.setBorder(BorderFactory.createTitledBorder("Booking Details"));
+        detailsPanel.setBounds(100, 80, 400, 300);
+        add(detailsPanel);
 
- // Sample data (rows)
- Object[][] data = {
-     {"FL001", "Ava Garcia", "ava.garcia@example.com", "New York", "London", "2025-10-05 08:30", "2025-10-05 20:10"},
-     {"FL002", "Liam Smith", "liam.smith@example.com", "Los Angeles", "Tokyo", "2025-10-06 09:45", "2025-10-07 14:30"},
-     {"FL003", "Olivia Brown", "olivia.brown@example.com", "Paris", "Rome", "2025-10-07 06:00", "2025-10-07 08:15"},
-     {"FL004", "Noah Johnson", "noah.johnson@example.com", "Berlin", "Madrid", "2025-10-08 11:20", "2025-10-08 14:05"},
-     {"FL005", "Emma Jones", "emma.jones@example.com", "Sydney", "Singapore", "2025-10-09 17:00", "2025-10-09 21:30"},
-     {"FL006", "Lucas Garcia", "lucas.garcia@example.com", "Dubai", "Mumbai", "2025-10-10 13:10", "2025-10-10 17:55"},
-     {"FL007", "Mia Martinez", "mia.martinez@example.com", "Toronto", "Chicago", "2025-10-11 08:45", "2025-10-11 10:30"},
-     {"FL008", "Ethan Davis", "ethan.davis@example.com", "Hong Kong", "Bangkok", "2025-10-12 12:30", "2025-10-12 15:50"},
-     {"FL009", "Sophia Lopez", "sophia.lopez@example.com", "San Francisco", "Seattle", "2025-10-13 07:20", "2025-10-13 09:10"},
-     {"FL010", "Isabella Wilson", "isabella.wilson@example.com", "Chicago", "Miami", "2025-10-14 14:40", "2025-10-14 18:30"}
- };
+        int y = 20;
+        nameValue = createValueLabel("", 180, y);
+        detailsPanel.add(createFieldLabel("Passenger Name:", 30, y)); detailsPanel.add(nameValue); y+=35;
+        emailValue = createValueLabel("", 180, y);
+        detailsPanel.add(createFieldLabel("Email:", 30, y)); detailsPanel.add(emailValue); y+=35;
+        originValue = createValueLabel("", 180, y);
+        detailsPanel.add(createFieldLabel("Origin:", 30, y)); detailsPanel.add(originValue); y+=35;
+        destinationValue = createValueLabel("", 180, y);
+        detailsPanel.add(createFieldLabel("Destination:", 30, y)); detailsPanel.add(destinationValue); y+=35;
+        departValue = createValueLabel("", 180, y);
+        detailsPanel.add(createFieldLabel("Departure:", 30, y)); detailsPanel.add(departValue); y+=35;
+        returnValue = createValueLabel("", 180, y);
+        detailsPanel.add(createFieldLabel("Return:", 30, y)); detailsPanel.add(returnValue); y+=35;
+        priceValue = createValueLabel("", 180, y);
+        detailsPanel.add(createFieldLabel("Price:", 30, y)); detailsPanel.add(priceValue); y+=35;
+        routeValue = createValueLabel("", 180, y);
+        detailsPanel.add(createFieldLabel("Route:", 30, y)); detailsPanel.add(routeValue);
 
- DefaultTableModel model = new DefaultTableModel(data, columnNames) {
-     @Override
-     public boolean isCellEditable(int row, int column) {
-         return false; // make table read-only
-     }
- };
+        JPanel inputPanel = new JPanel(null);
+        inputPanel.setBorder(BorderFactory.createTitledBorder("Search Booking"));
+        inputPanel.setBounds(530, 120, 270, 180);
+        add(inputPanel);
 
- JTable table = new JTable(model);
- table.setAutoCreateRowSorter(true);
- table.setFillsViewportHeight(true);
- table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        JLabel bookingLabel = new JLabel("Booking ID:");
+        bookingLabel.setBounds(20, 40, 100, 25);
+        inputPanel.add(bookingLabel);
 
- // Adjust column widths
- table.getColumnModel().getColumn(0).setPreferredWidth(80);  // Flight ID
- table.getColumnModel().getColumn(1).setPreferredWidth(140); // Passenger Name
- table.getColumnModel().getColumn(2).setPreferredWidth(200); // Email
- table.getColumnModel().getColumn(3).setPreferredWidth(100); // Origin
- table.getColumnModel().getColumn(4).setPreferredWidth(100); // Destination
- table.getColumnModel().getColumn(5).setPreferredWidth(120); // Departure Time
- table.getColumnModel().getColumn(6).setPreferredWidth(120); // Arrival Time
+        bookingIdField = new JTextField();
+        bookingIdField.setBounds(20, 65, 220, 30);
+        inputPanel.add(bookingIdField);
 
- JScrollPane scrollPane = new JScrollPane(table);
- table.setPreferredScrollableViewportSize(new Dimension(860, 380));
+        JButton searchBtn = new JButton("Check Status");
+        searchBtn.setBackground(new Color(78, 159, 229));
+        searchBtn.setForeground(Color.WHITE);
+        searchBtn.setFocusPainted(false);
+        searchBtn.setFont(new Font("Arial", Font.BOLD, 14));
+        searchBtn.setBounds(20, 110, 220, 35);
+        searchBtn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        inputPanel.add(searchBtn);
 
- getContentPane().setLayout(new BorderLayout());
- getContentPane().add(scrollPane, BorderLayout.CENTER);
+        statusMessage = new JLabel("", SwingConstants.CENTER);
+        statusMessage.setBounds(250, 380, 400, 30);
+        add(statusMessage);
+
+        searchBtn.addActionListener(e -> fetchBookingDetails());
+    }
+
+    private JLabel createFieldLabel(String text, int x, int y) {
+        JLabel label = new JLabel(text);
+        label.setFont(new Font("Arial", Font.BOLD, 14));
+        label.setBounds(x, y, 130, 25);
+        return label;
+    }
+
+    private JLabel createValueLabel(String text, int x, int y) {
+        JLabel value = new JLabel(text);
+        value.setFont(new Font("Arial", Font.PLAIN, 14));
+        value.setBounds(x, y, 200, 25);
+        return value;
+    }
+
+    private void fetchBookingDetails() {
+        String bookingIdText = bookingIdField.getText().trim();
+        if (bookingIdText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter a booking ID.");
+            return; 
+        }
+
+        clearLabels();
+        statusMessage.setText("Searching...");
+
+        try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/airline", "root", "");
+             PreparedStatement ps = conn.prepareStatement(
+                     "SELECT b.booking_id, b.origin, b.destination, b.depart_date, b.return_date, " +
+                             "b.depart_time, b.return_time, b.price, b.route, p.name, p.email " +
+                             "FROM bookings b INNER JOIN passenger p ON b.passenger_id = p.passenger_id " +
+                             "WHERE b.booking_id = ?")) {
+
+            ps.setString(1, bookingIdText);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                nameValue.setText(rs.getString("name"));
+                emailValue.setText(rs.getString("email"));
+                originValue.setText(rs.getString("origin"));
+                destinationValue.setText(rs.getString("destination"));
+                departValue.setText(rs.getDate("depart_date") + " " + rs.getString("depart_time"));
+                returnValue.setText(rs.getDate("return_date") + " " + rs.getString("return_time"));
+                priceValue.setText("₱" + String.format("%.2f", rs.getDouble("price")));
+                routeValue.setText(rs.getString("route"));
+                statusMessage.setText("Booking found!");
+                statusMessage.setForeground(new Color(0, 128, 0));
+            } else {
+                statusMessage.setText("No booking found for ID: " + bookingIdText);
+                statusMessage.setForeground(Color.RED);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Database error: " + e.getMessage());
+        }
+    }
+
+    private void clearLabels() {
+        nameValue.setText("");
+        emailValue.setText("");
+        originValue.setText("");
+        destinationValue.setText("");
+        departValue.setText("");
+        returnValue.setText("");
+        priceValue.setText("");
+        routeValue.setText("");
+        statusMessage.setForeground(Color.GRAY);
+    }
 
 }
-
-public static void main(String[] args) {
-SwingUtilities.invokeLater(() -> { 
- FlightStatus frame = new FlightStatus(); 
- frame.setVisible(true); });
- }
-}
-
-
