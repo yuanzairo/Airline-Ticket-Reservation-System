@@ -10,20 +10,22 @@ public class DashBoard extends JFrame {
     JPanel bgPic;
     int algoType = 1;
 
-    private static final Map<String, double[]> cityCoords = Map.ofEntries(
-            Map.entry("Bacolod (BCD)", new double[] { 10.7764, 123.0150 }),
-            Map.entry("Butuan (BXU)", new double[] { 8.9494, 125.5130 }),
-            Map.entry("Cagayan de Oro (CGY)", new double[] { 8.4156, 124.6110 }),
-            Map.entry("Cebu (CEB)", new double[] { 10.3075, 123.9790 }),
-            Map.entry("Davao (DVO)", new double[] { 7.1255, 125.6460 }),
-            Map.entry("General Santos (GES)", new double[] { 6.1064, 125.2350 }),
-            Map.entry("Iloilo (ILO)", new double[] { 10.8330, 122.4934 }),
-            Map.entry("Legazpi (LGP)", new double[] { 13.1580, 123.7390 }),
-            Map.entry("Manila (MNL)", new double[] { 14.5086, 121.0200 }),
-            Map.entry("Puerto Princesa (PPS)", new double[] { 9.7422, 118.7520 }),
-            Map.entry("Tacloban (TAC)", new double[] { 11.2320, 125.0270 }),
-            Map.entry("Tagbilaran (TAG)", new double[] { 9.6489, 124.0420 }),
-            Map.entry("Zamboanga (ZAM)", new double[] { 6.9224, 122.0600 }));
+    private static final Map<String, double[]> cityCoords = new LinkedHashMap<>();
+    static {
+        cityCoords.put("Bacolod (BCD)", new double[] { 10.7764, 123.0150 });
+        cityCoords.put("Butuan (BXU)", new double[] { 8.9494, 125.5130 });
+        cityCoords.put("Cagayan de Oro (CGY)", new double[] { 8.4156, 124.6110 });
+        cityCoords.put("Cebu (CEB)", new double[] { 10.3075, 123.9790 });
+        cityCoords.put("Davao (DVO)", new double[] { 7.1255, 125.6460 });
+        cityCoords.put("General Santos (GES)", new double[] { 6.1064, 125.2350 });
+        cityCoords.put("Iloilo (ILO)", new double[] { 10.8330, 122.4934 });
+        cityCoords.put("Legazpi (LGP)", new double[] { 13.1580, 123.7390 });
+        cityCoords.put("Manila (MNL)", new double[] { 14.5086, 121.0200 });
+        cityCoords.put("Puerto Princesa (PPS)", new double[] { 9.7422, 118.7520 });
+        cityCoords.put("Tacloban (TAC)", new double[] { 11.2320, 125.0270 });
+        cityCoords.put("Tagbilaran (TAG)", new double[] { 9.6489, 124.0420 });
+        cityCoords.put("Zamboanga (ZAM)", new double[] { 6.9224, 122.0600 });
+    }
 
     private static final String[] cities = cityCoords.keySet().toArray(new String[0]);
 
