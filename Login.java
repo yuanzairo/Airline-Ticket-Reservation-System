@@ -15,13 +15,13 @@ public class Login extends JFrame {
         setTitle("Login");
         setSize(400, 250);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Center window
+        setLocationRelativeTo(null);
         setResizable(false);
 
         // Main panel
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-        panel.setBackground(new Color(40, 44, 52)); // dark background
+        panel.setBackground(new Color(40, 44, 52));
 
         // Title label
         JLabel title = new JLabel("Login", JLabel.CENTER);
@@ -105,14 +105,13 @@ public class Login extends JFrame {
     }
 
     private boolean authenticateUser(String username, String password) {
-        String url = "jdbc:mysql://localhost:3306/airline"; // replace with your DB name
-        String dbUser = "root"; // replace with your MySQL username
-        String dbPassword = ""; // replace with your MySQL password
+        String url = "jdbc:mysql://localhost:3306/airline";
+        String dbUser = "root";
+        String dbPassword = "";
 
         String query = "SELECT * FROM admins WHERE username = ? AND password = ?";
 
         try {
-            // Load the JDBC driver (optional in newer versions)
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             Connection conn = DriverManager.getConnection(url, dbUser, dbPassword);
