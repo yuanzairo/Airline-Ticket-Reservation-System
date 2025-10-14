@@ -337,8 +337,6 @@ public class BookFlight extends JFrame {
 
             JOptionPane.showMessageDialog(this, "Booking Confirmed!\nYour Booking ID is: " + bookingID);
             dispose();
-            new DashBoard();
-
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error saving booking: " + ex.getMessage());
@@ -381,3 +379,4 @@ public class BookFlight extends JFrame {
         return nextID;
     }
 }
+
