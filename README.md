@@ -77,4 +77,8 @@ All data (such as bookings, routes, and passengers) is stored in MySql.
 | **Flight Status** | Interface for checking flight status | <img width="891" height="498" alt="Flight Status" src="https://github.com/user-attachments/assets/0f3ebf5e-4b54-4f83-b7fa-7abd9b587867" /> |
 | **Travel Info** | Panel that shows the map of the Philippines | <img width="892" height="504" alt="Travel Info" src="https://github.com/user-attachments/assets/4d81e2e5-dbef-4301-8f2e-a5a3efa4be29" /> |
 
-
+## Enhancement Recommendations
+- Specify 13 cities
+- Comparison of running time
+- Table of comparison between Dijkstra 1 and 2 in the Results and Discussion
+  
