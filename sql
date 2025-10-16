@@ -1,4 +1,3 @@
---DDL
 CREATE DATABASE airline;
 
 CREATE TABLE admins (
@@ -30,17 +29,34 @@ CREATE TABLE bookings (
         ON UPDATE CASCADE
 );
 
---DML
-SELECT * FROM admins WHERE username = ? AND password = ?
-SELECT * FROM passenger WHERE passenger_id = ?
-SELECT passenger_id FROM passenger ORDER BY passenger_id DESC LIMIT 1
-SELECT booking_id FROM bookings ORDER BY booking_id DESC LIMIT 1
-  
-INSERT INTO passenger (passenger_id, name, age, email, contact) VALUES (?, ?, ?, ?, ?)
-INSERT INTO bookings (booking_id, passenger_id, origin, destination, depart_date, return_date, depart_time, return_time, price, route) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+CREATE TABLE cities (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    latitude DECIMAL(10, 8) NOT NULL,
+    longitude DECIMAL(11, 8) NOT NULL
+);
 
-SELECT b.booking_id, b.origin, b.destination, b.depart_date, b.return_date, " +
-"b.depart_time, b.return_time, b.price, b.route, p.name, p.email " +
-"FROM bookings b INNER JOIN passenger p ON b.passenger_id = p.passenger_id " +
-"WHERE b.booking_id = ?
+DELIMITER $$
 
+CREATE PROCEDURE InsertCities()
+BEGIN
+    DECLARE i INT DEFAULT 0;
+    DECLARE city_name VARCHAR(100);
+    DECLARE lat DECIMAL(10,8);
+    DECLARE lon DECIMAL(11,8);
+
+    WHILE i < 1000 DO
+        SET city_name = CONCAT('City (', LPAD(i, 3, '0'), ')');
+        SET lat = ROUND((-90 + (RAND() * 180)), 8);
+        SET lon = ROUND((-180 + (RAND() * 360)), 8);
+
+        INSERT INTO cities (name, latitude, longitude)
+        VALUES (city_name, lat, lon);
+
+        SET i = i + 1;
+    END WHILE;
+END$$
+
+DELIMITER;
+
+CALL InsertCities();
