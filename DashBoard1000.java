@@ -4,7 +4,7 @@ import java.util.List;
 import javax.swing.*;
 import com.toedter.calendar.JDateChooser;
 
-public class DashBoard extends JFrame {
+public class DashBoard1000 extends JFrame {
     private JLayeredPane layeredPane;
     private JPanel contentPanel;
     JPanel bgPic;
@@ -43,7 +43,7 @@ static {
     cities = cityCoords.keySet().toArray(new String[0]);
 }
 
-    public DashBoard() {
+    public DashBoard1000() {
         setTitle("Davao Airlines");
         setSize(900, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -620,6 +620,6 @@ static {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(DashBoard::new);
+        SwingUtilities.invokeLater(DashBoard1000::new);
     }
                                               }
