@@ -10,7 +10,7 @@ public class DashBoard extends JFrame {
     JPanel bgPic;
     int algoType = 1;
 
-    /*private static final Map<String, double[]> cityCoords = new LinkedHashMap<>();
+    private static final Map<String, double[]> cityCoords = new LinkedHashMap<>();
     static {
         cityCoords.put("Bacolod (BCD)", new double[] { 10.7764, 123.0150 });
         cityCoords.put("Butuan (BXU)", new double[] { 8.9494, 125.5130 });
@@ -26,41 +26,7 @@ public class DashBoard extends JFrame {
         cityCoords.put("Tagbilaran (TAG)", new double[] { 9.6489, 124.0420 });
         cityCoords.put("Zamboanga (ZAM)", new double[] { 6.9224, 122.0600 });
     }
-
-    private static final String[] cities = cityCoords.keySet().toArray(new String[0]);*/
-
-    private static Map<String, double[]> loadCitiesFromDB() {
-    Map<String, double[]> cityMap = new LinkedHashMap<>();
-
-    String query = "SELECT name, latitude, longitude FROM cities ORDER BY name";
-
-    try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/airline", "root", "");
-         PreparedStatement stmt = conn.prepareStatement(query);
-         ResultSet rs = stmt.executeQuery()) {
-
-        while (rs.next()) {
-            String name = rs.getString("name");
-            double lat = rs.getDouble("latitude");
-            double lon = rs.getDouble("longitude");
-            cityMap.put(name, new double[]{lat, lon});
-        }
-
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(null,
-            "Failed to load cities from database:\n" + e.getMessage(),
-            "Database Error", JOptionPane.ERROR_MESSAGE);
-        e.printStackTrace();
-    }
-
-    return cityMap;
-}
-private static Map<String, double[]> cityCoords;
-private static String[] cities;
-
-static {
-    cityCoords = loadCitiesFromDB();
-    cities = cityCoords.keySet().toArray(new String[0]);
-}
+    private static final String[] cities = cityCoords.keySet().toArray(new String[0]);
 
     public DashBoard() {
         setTitle("Davao Airlines");
@@ -365,22 +331,10 @@ static {
     // ===== Realistic flight network =====
     private static Map<String, Map<String, Double>> buildGraph() {
         Map<String, Map<String, Double>> graph = new HashMap<>();
-        List<String> cityList = new ArrayList<>(cityCoords.keySet());
         for (String city : cities)
             graph.put(city, new HashMap<>());
 
-        for (int i = 0; i < cityList.size() - 1; i++) {
-        String cityA = cityList.get(i);
-        String cityB = cityList.get(i + 1);
-        double[] coordA = cityCoords.get(cityA);
-        double[] coordB = cityCoords.get(cityB);
-        double distance = haversineDistance(coordA[0], coordA[1], coordB[0], coordB[1]);
-
-        graph.get(cityA).put(cityB, distance);
-        graph.get(cityB).put(cityA, distance);
-        }
-
-        /*connect(graph, "Manila (MNL)", "Iloilo (ILO)");
+        connect(graph, "Manila (MNL)", "Iloilo (ILO)");
         connect(graph, "Manila (MNL)", "Cebu (CEB)");
         connect(graph, "Manila (MNL)", "Legazpi (LGP)");
         connect(graph, "Manila (MNL)", "Puerto Princesa (PPS)");
@@ -405,7 +359,7 @@ static {
 
         connect(graph, "Puerto Princesa (PPS)", "Zamboanga (ZAM)");
         connect(graph, "Puerto Princesa (PPS)", "Iloilo (ILO)");
-        connect(graph, "Butuan (BXU)", "Davao (DVO)");*/
+        connect(graph, "Butuan (BXU)", "Davao (DVO)");
         return graph;
     }
 
